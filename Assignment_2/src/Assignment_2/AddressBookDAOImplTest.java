@@ -2,7 +2,6 @@ package Assignment_2;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,7 +22,7 @@ public class AddressBookDAOImplTest {
 	@Test
 	public void testCreateAddress() {
 		String fileName = System.getProperty("user.home")+"/addresses.csv";
-		AddressBookDAOImpl adr = new AddressBookDAOImpl(fileName);
+		AddressBookDAOImpl adr = new AddressBookDAOImpl();
 		
 		Contact contact =  new Contact ("10","joe","bloggs","1 the main street",
 				"new town","county here","0857788558");

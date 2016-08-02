@@ -1,6 +1,8 @@
 package Assignment_2;
 
 import java.io.IOException;
+import java.sql.Connection;	
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,25 +14,89 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 	
 	HashMap<Integer, Contact> addresses;
 	Contact contact = new Contact();
-	private String path;
 	int namekey = 0;
 	
 	
 	
 	
-	public AddressBookDAOImpl(String filename){
-		path = filename;
+	public AddressBookDAOImpl(){
 		
-		try{
-			
-			FileHandler rf  = new FileHandler(path);
-			addresses = rf.readAddresses();
-			
+		DBHandler db = null;
+
+		try {
+			db = new DBHandler("ad_file");
+		} catch (Exception ex1) {
+			ex1.printStackTrace();    // could not start db
+
+			return;                   // bye bye
 		}
-		catch (IOException e){
-			System.out.println(e.getMessage());
+
+		try {
+
+
+
+			     	    db.update("DROP TABLE addrs");
+			    	    System.out.println("Dropped table...");
+
+			db.update(
+					"CREATE TABLE addrs (contact_id "
+						    + "VARCHAR(5) PRIMARY KEY,"
+							+ "firstname VARCHAR(10)," 
+							+ " surname VARCHAR(10),"
+							+ " address_line_1 VARCHAR(20),"
+							+ "address_line_2 VARCHAR(20),"
+							+ "address_line_3 VARCHAR(20),"
+							+ "mobile VARCHAR (10))");	
+		} catch (SQLException ex2) {
+
+
 		}
-	}
+		System.out.println("created table...");
+		try {
+
+			// add some rows - will create duplicates if run more then once
+			// the id column is automatically generated
+			db.update(
+					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('1','Deirdre','lenehan','1 the main street','newtown','co dublin','0877601406')");
+
+			db.update(
+					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('1','Mark','lenehan','2 the main street','newtown','co dublin','0877601406')");
+
+			db.update(
+					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('1','Daniel','lenehan','3 the main street','newtown','co dublin','0877601406')");
+
+			db.update(
+					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('1','Matthew','lenehan','4 the main street','newtown','co dublin','0877601406')");
+
+			db.update(
+					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('1','Naomi','lenehan','5 the main street','newtown','co dublin','0877601406')");
+
+
+
+
+
+			// do a query
+			db.query("SELECT * FROM addrs");
+
+
+
+
+			// at end of program
+			db.shutdown();
+		} catch (SQLException ex3) {
+			ex3.printStackTrace();
+		}
+	}    // main()
+
+	
+    // class DBHandler
+
+	
 
 	@Override
 	public boolean createAddress(Contact contact) {
@@ -42,25 +108,34 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 	}
 
 	@Override
-	public void getContact(String surname) {
+	public Contact getContact(String surname) {
 		
 		for (int key: addresses.keySet()){
 			if (addresses.get(key).getSurname().equals(surname)){
 				System.out.println("found it!!");
-				System.out.println("here it is: " 
-              + addresses.get(key).getFirstname()+ " ,"
-			  + addresses.get(key).getSurname() + " ,"
-			  + addresses.get(key).getAddress_line_1() + " ,"
-			  + addresses.get(key).getAddress_line_2() + " ,"
-			  + addresses.get(key).getAddress_line_3() + " ,"
-			  + addresses.get(key).getMobile());
+				System.out.println("here it is: "); 
+			    contact = addresses.get(key);
 		
 			}
 		
 		}
-		
+	return contact;	
 	}
 
+	@Override
+	public void printContact(Contact contact){
+		System.out.println("Here goes: " + contact.getContact_id() + " "
+				+ contact.getFirstname() +
+				contact.getSurname() + "," +
+	            contact.getAddress_line_1() + "," +
+	            contact.getAddress_line_2() + "," +
+	            contact.getAddress_line_3() + "," +
+	            contact.getMobile() + ".") ;
+				
+		
+	}
+	
+	
 	@Override
 	public List<Contact> getAllAddresses() {
 		Collection<Contact> contacts = addresses.values();
@@ -106,7 +181,7 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 				
 			}
 		}
-		// TODO Auto-generated method stub
+		
 		return value;
 	}
 	
@@ -118,9 +193,7 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 	
 	
 	public String getNextKey() {
-		
-	
-		
+			
 		 int max_key = 0;
 		 int contct_id;
 		 int counter;

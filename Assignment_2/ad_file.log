@@ -1,0 +1,5 @@
+/*C3*/SET SCHEMA PUBLIC
+DROP TABLE addrs
+CREATE TABLE addrs (contact_id VARCHAR(5) PRIMARY KEY,firstname VARCHAR(10), surname VARCHAR(10), address_line_1 VARCHAR(20),address_line_2 VARCHAR(20),address_line_3 VARCHAR(20),mobile VARCHAR (10))
+INSERT INTO ADDRS VALUES('1','Deirdre','lenehan','1 the main street','newtown','co dublin','0877601406')
+COMMIT

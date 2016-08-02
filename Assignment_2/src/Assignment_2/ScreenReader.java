@@ -18,7 +18,7 @@ public class ScreenReader {
 
 	MenuDisplay menu = new MenuDisplay();	
 	Scanner sc = new Scanner(System.in);
-	AddressBookDAOImpl adr = new AddressBookDAOImpl(fileName);
+	AddressBookDAOImpl adr = new AddressBookDAOImpl();
 	
 	
 	
@@ -77,7 +77,8 @@ public class ScreenReader {
 			case 6:
 				System.out.println("Please enter surname. ");
 				namein = sc.next();
-				adr.getContact(namein);
+				contact = adr.getContact(namein);
+				adr.printContact(contact);
 				break;
 			case 7: System.exit(0);
 			sc.close();

@@ -4,10 +4,11 @@ import java.util.*;
 
 public interface AddressBookDAO {
 	boolean createAddress(Contact c);
-	void getContact(String key);
+	Contact getContact(String key);
 	List<Contact> getAllAddresses();
 	boolean updateAddress(String key);
 	boolean deleteAddress(Integer keycode);
+	void printContact(Contact c);
 	Integer findKey(String key);
 
 }
