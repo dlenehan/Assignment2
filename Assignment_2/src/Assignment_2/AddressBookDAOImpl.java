@@ -24,64 +24,29 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 		DBHandler db = null;
 
 		try {
-			db = new DBHandler("ad_file");
+			db = new DBHandler();
 		} catch (Exception ex1) {
 			ex1.printStackTrace();    // could not start db
 
 			return;                   // bye bye
 		}
 
-		try {
-
-
-
-			     	    db.update("DROP TABLE addrs");
-			    	    System.out.println("Dropped table...");
-
-			db.update(
-					"CREATE TABLE addrs (contact_id "
-						    + "VARCHAR(5) PRIMARY KEY,"
-							+ "firstname VARCHAR(10)," 
-							+ " surname VARCHAR(10),"
-							+ " address_line_1 VARCHAR(20),"
-							+ "address_line_2 VARCHAR(20),"
-							+ "address_line_3 VARCHAR(20),"
-							+ "mobile VARCHAR (10))");	
-		} catch (SQLException ex2) {
-
-
-		}
-		System.out.println("created table...");
+		
 		try {
 
 			// add some rows - will create duplicates if run more then once
 			// the id column is automatically generated
 			db.update(
-					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
-							+ " VALUES('1','Deirdre','lenehan','1 the main street','newtown','co dublin','0877601406')");
+					"INSERT INTO addresses(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('3','Peter','Smith','1 the main street','newtown','co dublin','0877601406')");
 
 			db.update(
-					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
-							+ " VALUES('1','Mark','lenehan','2 the main street','newtown','co dublin','0877601406')");
+					"INSERT INTO addresses(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
+							+ " VALUES('4','Jack','Byrne','2 the main street','newtown','co dublin','0877601406')");
 
-			db.update(
-					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
-							+ " VALUES('1','Daniel','lenehan','3 the main street','newtown','co dublin','0877601406')");
-
-			db.update(
-					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
-							+ " VALUES('1','Matthew','lenehan','4 the main street','newtown','co dublin','0877601406')");
-
-			db.update(
-					"INSERT INTO addrs(contact_id, firstname, surname, address_line_1, address_line_2, address_line_3, mobile)"
-							+ " VALUES('1','Naomi','lenehan','5 the main street','newtown','co dublin','0877601406')");
-
-
-
-
-
+			
 			// do a query
-			db.query("SELECT * FROM addrs");
+			addresses = db.loadAddresses("SELECT * FROM addresses");
 
 
 
@@ -91,7 +56,7 @@ public class AddressBookDAOImpl implements AddressBookDAO{
 		} catch (SQLException ex3) {
 			ex3.printStackTrace();
 		}
-	}    // main()
+	}   // main()
 
 	
     // class DBHandler

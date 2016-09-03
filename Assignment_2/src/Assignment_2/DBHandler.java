@@ -15,14 +15,17 @@ public class DBHandler {
     int value;
     
    
-    public DBHandler(String db_file_name_prefix) throws Exception {    
+    public DBHandler() throws Exception {    
+        
         
         Class.forName("org.hsqldb.jdbcDriver");
-        
-        conn = DriverManager.getConnection("jdbc:hsqldb:"
-                                           + db_file_name_prefix,    // filenames
+
+        conn = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost:9001/addresses",
                                            "sa",                     // username
                                            "");                      // password
+        
+        
+        
     }
 
     public void shutdown() throws SQLException {
@@ -37,29 +40,82 @@ public class DBHandler {
 
         Statement st = null;
         ResultSet rs = null;
+        HashMap<Integer, Contact> adr= new HashMap<Integer, Contact>();
 
         st = conn.createStatement();         
-        
+        System.out.println("before select ");
         rs = st.executeQuery(expression);    // run the query
+        System.out.println("after select");
+        
         
         while (rs.next()) { 
-            HashMap<Integer, Contact> adr= new HashMap<Integer, Contact>();
-            String contact_id = rs.getString("contact_id");
-            String firstname=rs.getString("firstname");
-            String surname=rs.getString("surname");
-            String address_line_1=rs.getString("adr1");
-            String address_line_2 = rs.getString("adr2");
-            String address_line_3 = rs.getString("adr3");
-            String mobile = rs.getString("mobile");
-            Contact contact = new Contact(contact_id,firstname,surname,address_line_1,address_line_2,
+           
+            String contact_id = rs.getString("CONTACT_ID");
+            String firstname=rs.getString("FIRSTNAME");
+            String surname=rs.getString("SURNAME");
+            String address_line_1=rs.getString("ADDRESS_LINE_1");
+            String address_line_2 = rs.getString("ADDRESS_LINE_2");
+            String address_line_3 = rs.getString("ADDRESS_LINE_3");
+            String mobile = rs.getString("MOBILE");
+            Contact contact = new Contact
+(contact_id,firstname,surname,address_line_1,address_line_2,
             		address_line_3,mobile);
              value = contact.hashCode();
             adr.put(value, contact);
         }
         
+        
+        
+        dump(rs);
+        st.close();  	
 
   
     }
+    
+    
+  //use for SQL command SELECT
+    public synchronized HashMap<Integer,Contact> loadAddresses(String expression) throws SQLException {
+
+        Statement st = null;
+        ResultSet rs = null;
+        HashMap<Integer, Contact> adr= new HashMap<Integer, Contact>();
+
+        st = conn.createStatement();         
+        System.out.println("before select ");
+        rs = st.executeQuery(expression);    // run the query
+        System.out.println("after select");
+        
+        
+        while (rs.next()) { 
+           
+            String contact_id = rs.getString("CONTACT_ID");
+            String firstname=rs.getString("FIRSTNAME");
+            String surname=rs.getString("SURNAME");
+            String address_line_1=rs.getString("ADDRESS_LINE_1");
+            String address_line_2 = rs.getString("ADDRESS_LINE_2");
+            String address_line_3 = rs.getString("ADDRESS_LINE_3");
+            String mobile = rs.getString("MOBILE");
+            Contact contact = new Contact
+(contact_id,firstname,surname,address_line_1,address_line_2,
+            		address_line_3,mobile);
+             value = contact.hashCode();
+            adr.put(value, contact);
+        }
+        
+        
+        
+        dump(rs);
+        st.close();  	
+        return adr;
+  
+    }
+    
+    
+    
+    
+    
+    
+    
 
 //use for SQL commands CREATE, DROP, INSERT and UPDATE
     public synchronized void update(String expression) throws SQLException {

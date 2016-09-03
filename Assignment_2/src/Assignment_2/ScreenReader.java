@@ -20,8 +20,6 @@ public class ScreenReader {
 	Scanner sc = new Scanner(System.in);
 	AddressBookDAOImpl adr = new AddressBookDAOImpl();
 	
-	
-	
 	public void readOptions(){
 		while (answer != 7){
 		
